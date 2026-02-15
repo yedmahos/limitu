@@ -1,0 +1,116 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Premium Light Theme (Soft Slate & Emerald) */
+    --background: 210 40% 98%;
+    /* #f8fafc - Soft off-white */
+    --foreground: 222.2 47.4% 11.2%;
+    /* #0f172a - Deep Navy Black */
+
+    --card: 0 0% 100%;
+    /* Pure White */
+    --card-foreground: 222.2 47.4% 11.2%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 47.4% 11.2%;
+
+    --primary: 158 64% 52%;
+    /* Emerald 600 - More vibrant */
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 210 40% 96.1%;
+    /* Very light slate */
+    --secondary-foreground: 222.2 47.4% 11.2%;
+
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+
+    --accent: 158 64% 95%;
+    /* Very light green tint for accents */
+    --accent-foreground: 158 64% 35%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 158 64% 52%;
+    /* Match primary */
+
+    --radius: 0.75rem;
+  }
+
+  .dark {
+    /* Dark Theme (Green & Black) */
+    --background: 0 0% 0%;
+    /* Black */
+    --foreground: 0 0% 100%;
+    /* White */
+
+    --card: 0 0% 0%;
+    --card-foreground: 0 0% 100%;
+
+    --popover: 0 0% 0%;
+    --popover-foreground: 0 0% 100%;
+
+    --primary: 142 71% 45%;
+    /* Green-600 */
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 0 0% 10%;
+    /* Dark Gray */
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 0 0% 10%;
+    --muted-foreground: 0 0% 60%;
+
+    --accent: 0 0% 10%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 0 0% 20%;
+    --input: 0 0% 20%;
+    --ring: 142 71% 45%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Outfit', sans-serif;
+  }
+}
+
+/* Glassmorphism Utilities */
+@layer utilities {
+  .glass {
+    @apply bg-white/70 backdrop-blur-md border border-white/40 shadow-sm transition-all duration-300;
+  }
+
+  .glass:hover {
+    @apply border-white/60 shadow-md transform -translate-y-[1px];
+  }
+
+  .glass-card {
+    @apply bg-white/80 backdrop-blur-xl border border-white/50 shadow-lg dark:bg-gray-900/40 dark:border-white/10;
+  }
+
+  .text-gradient {
+    @apply text-white;
+  }
+
+  .safe-area-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
