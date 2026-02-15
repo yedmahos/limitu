@@ -70,7 +70,7 @@ const AppLayout = () => {
             <nav className="hidden md:flex fixed top-0 w-full h-16 border-b border-border bg-background/50 backdrop-blur-md z-50 px-6 items-center justify-between">
                 {/* Logo - Redirects to Dashboard */}
                 <NavLink to="/dashboard" className="flex items-center gap-2 group">
-                    <img src="/src/assets/logo.png" alt="Limit U Logo" className="w-8 h-8 object-contain" />
+                    <img src="/logo.png" alt="Limit U Logo" className="w-8 h-8 object-contain" />
                     <span className="font-bold text-xl tracking-tight text-foreground group-hover:opacity-90 transition-opacity">Limit U</span>
                 </NavLink>
 

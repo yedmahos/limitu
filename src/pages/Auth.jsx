@@ -140,7 +140,7 @@ const Auth = () => {
                     transition={{ duration: 0.8 }}
                 >
                     <div className="flex items-center gap-3 mb-8">
-                        <img src="/src/assets/logo.png" alt="Limit U Logo" className="w-10 h-10 object-contain" />
+                        <img src="/logo.png" alt="Limit U Logo" className="w-10 h-10 object-contain" />
                         <h1 className="text-4xl font-bold tracking-tight text-foreground">Limit U</h1>
                     </div>
 
@@ -178,7 +178,7 @@ const Auth = () => {
             <div className="w-full lg:w-1/2 flex flex-col items-center justify-center px-6 relative z-10">
                 {/* Mobile Brand Header */}
                 <div className="lg:hidden flex flex-col items-center mb-8">
-                    <img src="/src/assets/logo.png" alt="Limit U Logo" className="w-12 h-12 object-contain mb-4" />
+                    <img src="/logo.png" alt="Limit U Logo" className="w-12 h-12 object-contain mb-4" />
                     <h1 className="text-3xl font-bold text-foreground">Limit U</h1>
                     <p className="text-muted-foreground">Build discipline. Spend smart.</p>
                 </div>

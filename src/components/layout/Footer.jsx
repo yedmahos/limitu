@@ -8,7 +8,7 @@ const Footer = () => {
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
                     <div className="space-y-4">
                         <div className="flex items-center gap-2">
-                            <img src="/src/assets/logo.png" alt="Limit U Logo" className="w-8 h-8 object-contain" />
+                            <img src="/logo.png" alt="Limit U Logo" className="w-8 h-8 object-contain" />
                             <span className="text-xl font-bold tracking-tight">Limit U</span>
                         </div>
                         <p className="text-muted-foreground leading-relaxed">

@@ -64,7 +64,7 @@ const Navbar = () => {
             >
                 <div className="container mx-auto px-6 flex items-center justify-between">
                     <Link to="/" className="flex items-center gap-2 group">
-                        <img src="/src/assets/logo.png" alt="Limit U Logo" className="w-8 h-8 object-contain" />
+                        <img src="/logo.png" alt="Limit U Logo" className="w-8 h-8 object-contain" />
                         <span className="text-xl font-bold tracking-tight text-foreground">Limit U</span>
                     </Link>
 
