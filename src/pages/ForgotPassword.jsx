@@ -16,16 +16,14 @@ const Field = ({ label, error, ...props }) => {
           {...props}
           onFocus={(e) => { setFocused(true); props.onFocus?.(e); }}
           onBlur={(e) => { setFocused(false); props.onBlur?.(e); }}
-          className={`peer w-full bg-transparent border-b ${
-            error ? 'border-rust/50' : focused ? 'border-lime/40' : 'border-bone/[0.08]'
-          } pt-6 pb-2.5 px-0 font-mono text-[14px] text-bone outline-none transition-all duration-300 placeholder-transparent`}
+          className={`peer w-full bg-transparent border-b ${error ? 'border-rust/50' : focused ? 'border-lime/40' : 'border-bone/[0.08]'
+            } pt-6 pb-2.5 px-0 font-mono text-[14px] text-bone outline-none transition-all duration-300 placeholder-transparent`}
           placeholder={label}
         />
-        <label className={`absolute left-0 transition-all duration-300 pointer-events-none font-mono ${
-          active
+        <label className={`absolute left-0 transition-all duration-300 pointer-events-none font-mono ${active
             ? 'top-0.5 text-[10px] tracking-[0.15em] uppercase ' + (error ? 'text-rust/60' : focused ? 'text-lime/50' : 'text-bone/25')
             : 'top-[18px] text-[13px] text-bone/20'
-        }`}>
+          }`}>
           {label}
         </label>
       </div>
@@ -72,13 +70,8 @@ export default function ForgotPassword() {
       <div className="absolute bottom-[15%] right-[20%] w-[300px] h-[300px] bg-rust/[0.02] rounded-full blur-[120px]" />
 
       {/* Back to sign in */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.3 }}
-        className="fixed top-5 left-5 z-20"
-      >
-        <Link to="/auth" className="flex items-center gap-2 font-mono text-[11px] text-bone/25 hover:text-bone/50 transition-colors">
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.4 }} className="lg:hidden fixed top-5 left-5 z-20">
+        <Link to="/signin" className="flex items-center gap-2 font-mono text-[11px] text-bone/25 hover:text-bone/50 transition-colors">
           <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" /></svg>
           Back to sign in
         </Link>
@@ -190,8 +183,8 @@ export default function ForgotPassword() {
                 </button>
 
                 <Link
-                  to="/auth"
-                  className="block w-full text-center font-mono text-[11px] text-bone/20 hover:text-bone/40 transition-colors py-2"
+                  to="/signin"
+                  className="font-mono text-[12px] text-bone/30 hover:text-bone/50 transition-colors"
                 >
                   Back to sign in
                 </Link>

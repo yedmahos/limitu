@@ -3,7 +3,8 @@ import { AppProvider, useApp } from './context/AppContext';
 import Navbar from './components/Navbar';
 import { RouteProgressBar, PageTransition } from './components/PageTransition';
 import Landing from './pages/Landing';
-import Auth from './pages/Auth';
+import SignIn from './pages/SignIn';
+import SignUp from './pages/SignUp';
 import Dashboard from './pages/Dashboard';
 import Simulator from './pages/Simulator';
 import LimAI from './pages/LimAI';
@@ -15,7 +16,7 @@ import About from './pages/About';
 
 function ProtectedRoute({ children }) {
   const { user } = useApp();
-  if (!user) return <Navigate to="/auth" replace />;
+  if (!user) return <Navigate to="/signin" replace />;
   return children;
 }
 
@@ -27,7 +28,8 @@ function AnimatedRoutes() {
     <PageTransition>
       <Routes location={location} key={location.pathname}>
         <Route path="/" element={user ? <Navigate to="/dashboard" replace /> : <Landing />} />
-        <Route path="/auth" element={user ? <Navigate to="/dashboard" replace /> : <Auth />} />
+        <Route path="/signin" element={user ? <Navigate to="/dashboard" replace /> : <SignIn />} />
+        <Route path="/signup" element={user ? <Navigate to="/dashboard" replace /> : <SignUp />} />
         <Route path="/forgot-password" element={user ? <Navigate to="/dashboard" replace /> : <ForgotPassword />} />
         <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
         <Route path="/simulator" element={<ProtectedRoute><Simulator /></ProtectedRoute>} />

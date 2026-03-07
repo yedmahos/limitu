@@ -115,7 +115,7 @@ export default function Navbar() {
                   <span className={`transition-colors duration-200 ${isActive ? 'text-lime' : 'text-bone/45 hover:text-bone/80'}`}>Team</span>
                 )}
               </AnimatedNavLink>
-              <NavLink to="/auth">
+              <NavLink to="/signin">
                 <motion.span
                   className="inline-block font-display text-[11px] bg-lime text-ink px-3 sm:px-5 py-2 rounded-xl tracking-wide font-bold whitespace-nowrap"
                   whileHover={{ scale: 1.05, boxShadow: '0 4px 20px rgba(200,241,53,0.3)' }}

@@ -143,7 +143,7 @@ export default function About() {
           </h2>
           <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
             <Link
-              to="/auth"
+              to="/signup"
               className="group inline-flex items-center gap-3 bg-bone text-ink font-display font-bold text-[14px] px-8 py-4 rounded-full transition-all duration-300 hover:bg-lime hover:shadow-[0_0_40px_rgba(200,241,53,0.3)]"
             >
               Start using LIM

@@ -1,8 +1,7 @@
-import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useState, useEffect, useRef } from 'react';
+import { motion, AnimatePresence, useMotionValue, useSpring } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import Footer from '../components/Footer';
-
 
 const ease = [0.25, 1, 0.5, 1];
 const fadeUp = {
@@ -282,8 +281,14 @@ function HeroShowcase() {
 }
 
 export default function Landing() {
+  const [activeStep, setActiveStep] = useState(0);
+
+  const handleNext = () => setActiveStep((prev) => Math.min(2, prev + 1));
+  const handlePrev = () => setActiveStep((prev) => Math.max(0, prev - 1));
+
   return (
-    <div className="min-h-screen bg-ink grain">
+    <div className="min-h-screen bg-ink grain relative overflow-hidden">
+
       {/* Hero */}
       <section className="relative min-h-[100vh] flex flex-col justify-center px-6 md:px-12 lg:px-20 overflow-hidden">
         <div className="absolute top-[-20%] right-[-10%] w-[700px] h-[700px] rounded-full bg-lime/[0.035] blur-[180px] pointer-events-none" />
@@ -300,7 +305,7 @@ export default function Landing() {
               </motion.h1>
 
               <motion.div variants={fadeUp} custom={3} className="flex flex-wrap items-center gap-4 mt-1">
-                <Link to="/auth" className="group inline-flex items-center gap-2.5 bg-lime text-ink font-display font-bold text-[13px] px-7 py-3.5 rounded-2xl transition-all duration-300 hover:shadow-[0_8px_40px_rgba(200,241,53,0.2)] hover:-translate-y-0.5 active:translate-y-0 relative overflow-hidden">
+                <Link to="/signup" className="group inline-flex items-center gap-2.5 bg-lime text-ink font-display font-bold text-[13px] px-7 py-3.5 rounded-2xl transition-all duration-300 hover:shadow-[0_8px_40px_rgba(200,241,53,0.2)] hover:-translate-y-0.5 active:translate-y-0 relative overflow-hidden">
                   <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/[0.07] to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-700" />
                   Start Managing
                   <svg className="w-4 h-4 transition-transform group-hover:translate-x-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
@@ -352,23 +357,154 @@ export default function Landing() {
               Three steps to{' '}<span className="font-serif italic font-normal text-lime/60">financial calm.</span>
             </motion.h2>
 
-            <div className="grid md:grid-cols-3 gap-4 relative mt-12">
-              {/* Connecting line (desktop) */}
-              <div className="hidden md:block absolute top-[60px] left-[16.66%] right-[16.66%] h-px bg-gradient-to-r from-lime/[0.06] via-lime/[0.12] to-lime/[0.06]" />
+            <div className="relative mt-8 md:mt-16 h-[500px] flex items-center justify-center w-full group">
 
-              {steps.map((step, i) => (
-                <motion.div key={step.num} variants={fadeUp} custom={i + 2} className="relative">
-                  <div className="card p-8 group hover:border-lime/[0.08] transition-all duration-500">
-                    {/* Step number with glow */}
-                    <div className="relative mb-6">
-                      <div className="w-12 h-12 rounded-2xl bg-lime/[0.06] border border-lime/[0.08] flex items-center justify-center group-hover:bg-lime/[0.1] group-hover:border-lime/[0.15] transition-all duration-500">
-                        <span className="font-display font-extrabold text-[14px] text-lime/60 group-hover:text-lime/80 transition-colors">{step.num}</span>
+              {/* Left Arrow */}
+              <button
+                onClick={handlePrev}
+                disabled={activeStep === 0}
+                className="absolute left-0 md:left-4 z-30 w-12 h-12 rounded-full border border-bone/[0.08] bg-ink/40 backdrop-blur-md flex items-center justify-center text-bone/60 hover:text-lime hover:border-lime/30 hover:bg-lime/5 transition-all disabled:opacity-0 disabled:pointer-events-none"
+              >
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+                </svg>
+              </button>
+
+              {/* Right Arrow */}
+              <button
+                onClick={handleNext}
+                disabled={activeStep === 2}
+                className="absolute right-0 md:right-4 z-30 w-12 h-12 rounded-full border border-bone/[0.08] bg-ink/40 backdrop-blur-md flex items-center justify-center text-bone/60 hover:text-lime hover:border-lime/30 hover:bg-lime/5 transition-all disabled:opacity-0 disabled:pointer-events-none"
+              >
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
+
+              {[
+                {
+                  id: 0,
+                  content: (
+                    <div className="card p-6 h-full flex flex-col group transition-all duration-500 w-full min-h-[400px]">
+                      <div className="flex-1 mb-6 -mt-2 -mx-2 rounded-xl bg-gradient-to-br from-bone/[0.04] to-transparent border border-bone/[0.03] p-4 flex items-center justify-center relative overflow-hidden">
+                        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(200,241,53,0.03),transparent_70%)]" />
+                        <div className="w-full space-y-2.5 relative z-10">
+                          <div className="flex justify-between items-center text-[10px] sm:text-[12px] font-mono border-b border-bone/[0.05] pb-2">
+                            <span className="text-bone/45">Monthly Allowance</span>
+                            <span className="text-lime/90 font-bold">₹12,000</span>
+                          </div>
+                          <div className="flex justify-between items-center text-[10px] sm:text-[12px] font-mono border-b border-bone/[0.05] pb-2">
+                            <span className="text-bone/45">Fixed Subscriptions</span>
+                            <span className="text-rust/90">- ₹1,400</span>
+                          </div>
+                          <div className="flex justify-between items-center text-[11px] sm:text-[14px] font-display font-bold pt-1">
+                            <span className="text-bone/70">Safe to spend</span>
+                            <span className="text-bone text-[13px] sm:text-[16px]">₹10,600</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div>
+                        <div className="flex items-center gap-3 mb-2">
+                          <div className="font-display font-extrabold text-[12px] text-lime/60 group-hover:text-lime/90 transition-colors">01</div>
+                          <h3 className="font-display font-bold text-[16px] sm:text-[18px] text-bone tracking-tight">Set your allowance</h3>
+                        </div>
+                        <p className="font-mono text-[11px] sm:text-[13px] text-bone/45 leading-[1.8] transition-colors">Monthly amount + fixed expenses. 30 seconds.</p>
                       </div>
                     </div>
-                    <h3 className="font-display font-bold text-[15px] text-bone mb-3 tracking-tight">{step.title}</h3>
-                    <p className="font-mono text-[11px] text-bone/25 leading-[1.8] group-hover:text-bone/35 transition-colors">{step.desc}</p>
-                  </div>
-                </motion.div>
+                  )
+                },
+                {
+                  id: 1,
+                  content: (
+                    <div className="card p-6 h-full flex flex-col group transition-all duration-500 w-full min-h-[400px]">
+                      <div className="flex-1 mb-6 -mt-2 -mx-2 rounded-xl bg-gradient-to-bl from-bone/[0.04] to-transparent border border-bone/[0.03] p-4 flex flex-col items-center justify-center relative overflow-hidden">
+                        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_100%,rgba(200,241,53,0.03),transparent_70%)]" />
+                        <div className="relative w-24 h-24 sm:w-32 sm:h-32 mb-2 z-10 transition-transform duration-500">
+                          <svg viewBox="0 0 100 100" className="w-full h-full -rotate-90">
+                            <circle cx="50" cy="50" r="42" stroke="rgba(245,240,232,0.08)" strokeWidth="6" fill="none" />
+                            <motion.circle
+                              cx="50" cy="50" r="42" stroke="#C8F135" strokeWidth="6" fill="none"
+                              strokeDasharray="263.9" strokeDashoffset={activeStep === 1 ? 100 : 263.9} strokeLinecap="round"
+                              transition={{ duration: 1.5, ease: [0.25, 1, 0.5, 1] }}
+                            />
+                          </svg>
+                          <div className="absolute inset-0 flex flex-col items-center justify-center">
+                            <span className="font-display font-bold text-[15px] sm:text-[20px] text-bone">₹467</span>
+                            <span className="font-mono text-[9px] sm:text-[11px] text-bone/45 uppercase tracking-widest mt-0.5">Today</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div>
+                        <div className="flex items-center gap-3 mb-2">
+                          <div className="font-display font-extrabold text-[12px] text-lime/60 group-hover:text-lime/90 transition-colors">02</div>
+                          <h3 className="font-display font-bold text-[16px] sm:text-[18px] text-bone tracking-tight">Get daily limits</h3>
+                        </div>
+                        <p className="font-mono text-[11px] sm:text-[13px] text-bone/45 leading-[1.8] transition-colors">We calculate your optimal daily spend.</p>
+                      </div>
+                    </div>
+                  )
+                },
+                {
+                  id: 2,
+                  content: (
+                    <div className="card p-6 h-full flex flex-col group transition-all duration-500 w-full min-h-[400px]">
+                      <div className="flex-1 mb-6 -mt-2 -mx-2 rounded-xl bg-gradient-to-tr from-bone/[0.04] to-transparent border border-bone/[0.03] p-4 flex flex-col items-center justify-center relative overflow-hidden">
+                        <div className="absolute w-full h-full inset-0 bg-[radial-gradient(circle_at_0%_50%,rgba(200,241,53,0.03),transparent_70%)]" />
+                        <div className="w-full space-y-3 z-10 px-2 sm:px-6">
+                          <div className="flex justify-end">
+                            <div className="bg-lime/[0.09] border border-lime/[0.2] text-lime/90 font-mono text-[10px] sm:text-[12px] px-4 py-2.5 rounded-2xl rounded-tr-md max-w-[85%]">
+                              Can I buy a ₹300 coffee?
+                            </div>
+                          </div>
+                          <div className="flex justify-start">
+                            <div className="bg-bone/[0.07] border border-bone/[0.11] text-bone/70 font-mono text-[10px] sm:text-[12px] px-4 py-3 rounded-2xl rounded-tl-md max-w-[90%] leading-[1.6]">
+                              Yes! You'll still have ₹167 left in today's budget.
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div>
+                        <div className="flex items-center gap-3 mb-2">
+                          <div className="font-display font-extrabold text-[12px] text-lime/60 group-hover:text-lime/90 transition-colors">03</div>
+                          <h3 className="font-display font-bold text-[16px] sm:text-[18px] text-bone tracking-tight">Spend mindfully</h3>
+                        </div>
+                        <p className="font-mono text-[11px] sm:text-[13px] text-bone/45 leading-[1.8] transition-colors">Simulate, track, and let LIM guide you.</p>
+                      </div>
+                    </div>
+                  )
+                }
+              ].map((step, idx) => {
+                const isActive = activeStep === idx;
+                const offset = idx - activeStep; // -1, 0, 1
+
+                return (
+                  <motion.div
+                    key={step.id}
+                    initial={false}
+                    animate={{
+                      x: `calc(${offset * 85}% + ${offset * 1}rem)`,
+                      scale: isActive ? 1 : 0.85,
+                      opacity: isActive ? 1 : 0.4,
+                      filter: isActive ? 'blur(0px)' : 'blur(4px)',
+                      zIndex: isActive ? 10 : 0
+                    }}
+                    transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                    className="absolute w-[88%] sm:w-full max-w-[320px] md:max-w-sm"
+                  >
+                    {step.content}
+                  </motion.div>
+                );
+              })}
+            </div>
+
+            {/* Carousel Dots */}
+            <div className="flex justify-center gap-3 mt-8 relative z-20">
+              {[0, 1, 2].map((i) => (
+                <button
+                  key={i}
+                  onClick={() => setActiveStep(i)}
+                  className={`w-2 h-2 rounded-full transition-all duration-500 cursor-pointer ${activeStep === i ? 'bg-lime w-6' : 'bg-bone/[0.2] hover:bg-bone/[0.4]'}`}
+                />
               ))}
             </div>
           </motion.div>
@@ -376,7 +512,7 @@ export default function Landing() {
       </section>
 
       {/* LIM AI Preview */}
-      <section className="py-20 px-6 md:px-12 lg:px-20 relative overflow-hidden">
+      < section className="py-20 px-6 md:px-12 lg:px-20 relative overflow-hidden" >
         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-bone/[0.06] to-transparent" />
         <div className="absolute top-[30%] right-[-10%] w-[500px] h-[500px] bg-lime/[0.02] rounded-full blur-[150px] pointer-events-none" />
 
@@ -419,10 +555,10 @@ export default function Landing() {
             </motion.div>
           </motion.div>
         </div>
-      </section>
+      </section >
 
       {/* Testimonials */}
-      <section className="py-20 px-6 md:px-12 lg:px-20 relative">
+      < section className="py-20 px-6 md:px-12 lg:px-20 relative" >
         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-bone/[0.06] to-transparent" />
 
         <div className="max-w-6xl mx-auto">
@@ -451,10 +587,10 @@ export default function Landing() {
             </div>
           </motion.div>
         </div>
-      </section>
+      </section >
 
       {/* CTA */}
-      <section className="py-24 px-6 md:px-12 lg:px-20 relative overflow-hidden">
+      < section className="py-24 px-6 md:px-12 lg:px-20 relative overflow-hidden" >
         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-bone/[0.06] to-transparent" />
         <div className="absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-lime/[0.03] rounded-full blur-[200px] pointer-events-none" />
 
@@ -465,7 +601,7 @@ export default function Landing() {
             </motion.h2>
 
             <motion.div variants={fadeUp} custom={3} className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Link to="/auth" className="group inline-flex items-center gap-2.5 bg-lime text-ink font-display font-bold text-[14px] px-9 py-4 rounded-2xl transition-all duration-300 hover:shadow-[0_8px_40px_rgba(200,241,53,0.25)] hover:-translate-y-0.5 active:translate-y-0 relative overflow-hidden">
+              <Link to="/signup" className="group inline-flex items-center gap-2.5 bg-lime text-ink font-display font-bold text-[14px] px-9 py-4 rounded-2xl transition-all duration-300 hover:shadow-[0_8px_40px_rgba(200,241,53,0.25)] hover:-translate-y-0.5 active:translate-y-0 relative overflow-hidden">
                 <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/[0.07] to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-700" />
                 Start For Free
                 <svg className="w-4 h-4 transition-transform group-hover:translate-x-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
@@ -473,9 +609,9 @@ export default function Landing() {
             </motion.div>
           </motion.div>
         </div>
-      </section>
+      </section >
 
       <Footer />
-    </div>
+    </div >
   );
 }
