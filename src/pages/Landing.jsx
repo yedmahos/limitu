@@ -272,9 +272,8 @@ function HeroShowcase() {
           <button
             key={i}
             onClick={() => setView(i)}
-            className={`w-1.5 h-1.5 rounded-full transition-all duration-300 cursor-pointer ${
-              view === i ? 'bg-lime/50 w-4' : 'bg-bone/10'
-            }`}
+            className={`w-1.5 h-1.5 rounded-full transition-all duration-300 cursor-pointer ${view === i ? 'bg-lime/50 w-4' : 'bg-bone/10'
+              }`}
           />
         ))}
       </div>
@@ -461,19 +460,16 @@ export default function Landing() {
 
         <div className="max-w-3xl mx-auto text-center relative z-10">
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-80px' }}>
-            <motion.h2 variants={fadeUp} custom={0} className="font-display font-extrabold text-[clamp(2rem,5vw,3.2rem)] text-bone leading-[1.1] tracking-tight mb-5">
-              Built for students,<br />by people who{' '}<span className="font-serif italic font-normal text-lime/60">get it.</span>
+            <motion.h2 variants={fadeUp} custom={0} className="font-display font-extrabold text-[clamp(2.5rem,6vw,4.5rem)] text-bone leading-[1.1] tracking-tight mb-8">
+              <div className="tl-main">Spend with <em className="font-serif italic text-lime/80 font-normal">intention,</em><br />not regret.</div>
             </motion.h2>
-            <motion.p variants={fadeUp} custom={2} className="font-mono text-[12px] text-bone/25 max-w-md mx-auto leading-[1.9] mb-10">
-              No bank accounts. No jargon. Just a clean tool that helps you make your allowance last — completely free.
-            </motion.p>
+
             <motion.div variants={fadeUp} custom={3} className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <Link to="/auth" className="group inline-flex items-center gap-2.5 bg-lime text-ink font-display font-bold text-[14px] px-9 py-4 rounded-2xl transition-all duration-300 hover:shadow-[0_8px_40px_rgba(200,241,53,0.25)] hover:-translate-y-0.5 active:translate-y-0 relative overflow-hidden">
                 <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/[0.07] to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-700" />
                 Start For Free
                 <svg className="w-4 h-4 transition-transform group-hover:translate-x-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
               </Link>
-              <span className="font-mono text-[10px] text-bone/15 tracking-wider">No credit card required</span>
             </motion.div>
           </motion.div>
         </div>

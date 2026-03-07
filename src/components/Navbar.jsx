@@ -84,15 +84,15 @@ export default function Navbar() {
   useEffect(() => { setMobileOpen(false); }, [location.pathname]);
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-[10000]">
+    <nav className="fixed top-0 left-0 right-0 z-[10000] pointer-events-auto">
 
       {/* ── SIGNED-OUT floating pill ── */}
       {!user && (
-        <div className="mx-auto max-w-5xl px-5">
+        <div className="mx-auto max-w-5xl px-3 sm:px-5">
           <motion.div
-            className={`mt-4 rounded-2xl px-6 h-14 flex items-center justify-between transition-all duration-300 ${scrolled
-                ? 'bg-white/[0.06] backdrop-blur-2xl border border-white/[0.12] shadow-[0_8px_32px_rgba(0,0,0,0.4),inset_0_1px_0_rgba(255,255,255,0.06)]'
-                : 'bg-white/[0.03] backdrop-blur-xl border border-white/[0.07]'
+            className={`mt-4 rounded-2xl px-3 sm:px-6 h-14 flex items-center justify-between transition-all duration-300 ${scrolled
+              ? 'bg-white/[0.06] backdrop-blur-2xl border border-white/[0.12] shadow-[0_8px_32px_rgba(0,0,0,0.4),inset_0_1px_0_rgba(255,255,255,0.06)]'
+              : 'bg-white/[0.03] backdrop-blur-xl border border-white/[0.07]'
               }`}
             initial={{ opacity: 0, y: -16 }}
             animate={{ opacity: 1, y: 0 }}
@@ -104,7 +104,7 @@ export default function Navbar() {
               </motion.div>
             </NavLink>
 
-            <div className="flex items-center gap-6">
+            <div className="flex items-center gap-3 sm:gap-6">
               <AnimatedNavLink to="/about" className="font-mono text-[11px] tracking-wide">
                 {({ isActive }) => (
                   <span className={`transition-colors duration-200 ${isActive ? 'text-lime' : 'text-bone/45 hover:text-bone/80'}`}>About</span>
@@ -117,7 +117,7 @@ export default function Navbar() {
               </AnimatedNavLink>
               <NavLink to="/auth">
                 <motion.span
-                  className="inline-block font-display text-[11px] bg-lime text-ink px-5 py-2 rounded-xl tracking-wide font-bold"
+                  className="inline-block font-display text-[11px] bg-lime text-ink px-3 sm:px-5 py-2 rounded-xl tracking-wide font-bold whitespace-nowrap"
                   whileHover={{ scale: 1.05, boxShadow: '0 4px 20px rgba(200,241,53,0.3)' }}
                   whileTap={{ scale: 0.97 }}
                   transition={{ duration: 0.16 }}
@@ -135,8 +135,8 @@ export default function Navbar() {
         <div className="mx-auto max-w-7xl px-5">
           <motion.div
             className={`mt-3 rounded-2xl px-5 h-14 flex items-center justify-between transition-all duration-300 ${scrolled
-                ? 'bg-[#141517] backdrop-blur-2xl border border-bone/[0.12] shadow-[0_8px_40px_rgba(0,0,0,0.6),0_1px_0_rgba(245,240,232,0.06)_inset]'
-                : 'bg-ink/50 backdrop-blur-xl border border-bone/[0.07]'
+              ? 'bg-[#141517] backdrop-blur-2xl border border-bone/[0.12] shadow-[0_8px_40px_rgba(0,0,0,0.6),0_1px_0_rgba(245,240,232,0.06)_inset]'
+              : 'bg-ink/50 backdrop-blur-xl border border-bone/[0.07]'
               }`}
             initial={{ opacity: 0, y: -12 }}
             animate={{ opacity: 1, y: 0 }}
@@ -164,7 +164,7 @@ export default function Navbar() {
             <div className="flex items-center gap-3">
               <motion.button
                 onClick={() => { logout(); navigate('/'); }}
-                className="font-mono text-[11px] text-bone/30 hover:text-rust/80 transition-colors tracking-wide cursor-pointer"
+                className="hidden md:block font-mono text-[11px] text-bone/30 hover:text-rust/80 transition-colors tracking-wide cursor-pointer"
                 whileHover={{ y: -1 }}
                 whileTap={{ scale: 0.97 }}
                 transition={{ duration: 0.15 }}
@@ -174,24 +174,24 @@ export default function Navbar() {
 
               {/* Mobile hamburger */}
               <motion.button
-                className="md:hidden flex flex-col gap-1.5 p-1.5 cursor-pointer"
+                className="md:hidden flex flex-col gap-[5px] p-2 cursor-pointer"
                 onClick={() => setMobileOpen((v) => !v)}
                 whileTap={{ scale: 0.93 }}
                 aria-label="Toggle menu"
               >
                 <motion.span
-                  className="block h-px w-5 bg-bone/50 rounded-full origin-center"
-                  animate={mobileOpen ? { rotate: 45, y: 4 } : { rotate: 0, y: 0 }}
+                  className="block h-[1.5px] w-5 bg-bone/60 rounded-full origin-center"
+                  animate={mobileOpen ? { rotate: 45, y: 6.5 } : { rotate: 0, y: 0 }}
                   transition={{ duration: 0.22 }}
                 />
                 <motion.span
-                  className="block h-px w-5 bg-bone/50 rounded-full"
+                  className="block h-[1.5px] w-5 bg-bone/60 rounded-full"
                   animate={mobileOpen ? { opacity: 0, scaleX: 0 } : { opacity: 1, scaleX: 1 }}
                   transition={{ duration: 0.18 }}
                 />
                 <motion.span
-                  className="block h-px w-5 bg-bone/50 rounded-full origin-center"
-                  animate={mobileOpen ? { rotate: -45, y: -4 } : { rotate: 0, y: 0 }}
+                  className="block h-[1.5px] w-5 bg-bone/60 rounded-full origin-center"
+                  animate={mobileOpen ? { rotate: -45, y: -6.5 } : { rotate: 0, y: 0 }}
                   transition={{ duration: 0.22 }}
                 />
               </motion.button>
@@ -247,25 +247,6 @@ export default function Navbar() {
         )}
       </AnimatePresence>
 
-      {/* Mobile scrollable tab bar (logged in, md hidden, no hamburger alternative) */}
-      {user && !mobileOpen && (
-        <div className="md:hidden px-5 mt-2">
-          <div className="flex items-center gap-1 overflow-x-auto bg-bone/[0.03] rounded-xl p-1 no-scrollbar border border-bone/[0.04]">
-            {authLinks.map((link) => (
-              <NavLink
-                key={link.to}
-                to={link.to}
-                className={({ isActive }) =>
-                  `px-3 py-1.5 rounded-lg font-mono text-[10px] tracking-wide whitespace-nowrap transition-all duration-200 ${isActive ? 'bg-lime/10 text-lime' : 'text-bone/35 hover:text-bone/60'
-                  }`
-                }
-              >
-                {link.label}
-              </NavLink>
-            ))}
-          </div>
-        </div>
-      )}
     </nav>
   );
 }

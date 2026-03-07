@@ -30,8 +30,6 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overflow-x: hidden;
-    /* Promote body to its own GPU layer */
-    transform: translateZ(0);
   }
 
   ::selection {

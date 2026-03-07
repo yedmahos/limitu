@@ -38,16 +38,14 @@ const Field = ({ label, error, ...props }) => {
           {...props}
           onFocus={(e) => { setFocused(true); props.onFocus?.(e); }}
           onBlur={(e) => { setFocused(false); props.onBlur?.(e); }}
-          className={`peer w-full bg-transparent border-b ${
-            error ? 'border-rust/50' : focused ? 'border-lime/40' : 'border-bone/[0.08]'
-          } pt-6 pb-2.5 px-0 font-mono text-[14px] text-bone outline-none transition-all duration-300 placeholder-transparent`}
+          className={`peer w-full bg-transparent border-b ${error ? 'border-rust/50' : focused ? 'border-lime/40' : 'border-bone/[0.08]'
+            } pt-6 pb-2.5 px-0 font-mono text-[14px] text-bone outline-none transition-all duration-300 placeholder-transparent`}
           placeholder={label}
         />
-        <label className={`absolute left-0 transition-all duration-300 pointer-events-none font-mono ${
-          active
-            ? 'top-0.5 text-[10px] tracking-[0.15em] uppercase ' + (error ? 'text-rust/60' : focused ? 'text-lime/50' : 'text-bone/25')
-            : 'top-[18px] text-[13px] text-bone/20'
-        }`}>
+        <label className={`absolute left-0 transition-all duration-300 pointer-events-none font-mono ${active
+          ? 'top-0.5 text-[10px] tracking-[0.15em] uppercase ' + (error ? 'text-rust/60' : focused ? 'text-lime/50' : 'text-bone/25')
+          : 'top-[18px] text-[13px] text-bone/20'
+          }`}>
           {label}
         </label>
       </div>
@@ -333,7 +331,7 @@ export default function Auth() {
           </Link>
         </motion.div>
 
-        <div className="w-full max-w-[380px] px-6 py-16 relative z-10">
+        <div className="w-full max-w-[380px] px-6 pt-24 pb-16 relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
@@ -348,11 +346,10 @@ export default function Auth() {
                 <button
                   key={label}
                   onClick={() => { setIsSignUp(key); setErrors({}); }}
-                  className={`flex-1 py-2.5 rounded-xl font-display font-bold text-[12px] tracking-wide transition-all duration-300 cursor-pointer ${
-                    isSignUp === key
-                      ? 'bg-lime text-ink shadow-[0_2px_12px_rgba(200,241,53,0.15)]'
-                      : 'text-bone/30 hover:text-bone/50'
-                  }`}
+                  className={`flex-1 py-2.5 rounded-xl font-display font-bold text-[12px] tracking-wide transition-all duration-300 cursor-pointer ${isSignUp === key
+                    ? 'bg-lime text-ink shadow-[0_2px_12px_rgba(200,241,53,0.15)]'
+                    : 'text-bone/30 hover:text-bone/50'
+                    }`}
                 >
                   {label}
                 </button>
@@ -454,6 +451,18 @@ export default function Auth() {
                   )}
                 </button>
               </div>
+
+              {/* Terms Agreement */}
+              {isSignUp && (
+                <div className="text-center pt-4">
+                  <p className="font-mono text-[9px] text-bone/30 tracking-wide">
+                    By signing up, you agree to our{' '}
+                    <Link to="/terms" className="text-bone/50 hover:text-lime transition-colors underline decoration-bone/20 hover:decoration-lime/50 underline-offset-2">Terms</Link>
+                    {' '}and{' '}
+                    <Link to="/privacy" className="text-bone/50 hover:text-lime transition-colors underline decoration-bone/20 hover:decoration-lime/50 underline-offset-2">Privacy Policy</Link>.
+                  </p>
+                </div>
+              )}
             </form>
 
             {/* Divider */}
@@ -472,15 +481,7 @@ export default function Auth() {
               Continue with Google
             </button>
 
-            {/* Bottom trust */}
-            <div className="flex items-center justify-center gap-4 mt-8">
-              {['No bank needed', 'Free forever', 'Encrypted'].map((t) => (
-                <span key={t} className="flex items-center gap-1 font-mono text-[9px] text-bone/12 tracking-wide">
-                  <svg className="w-2.5 h-2.5 text-lime/25" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" /></svg>
-                  {t}
-                </span>
-              ))}
-            </div>
+
           </motion.div>
         </div>
       </div>
