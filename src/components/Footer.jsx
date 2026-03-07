@@ -3,7 +3,7 @@ import Logo from './Logo';
 
 export default function Footer() {
   return (
-    <footer className="relative mt-12 mx-6 md:mx-12 lg:mx-20 mb-6 rounded-2xl border border-bone/[0.04] bg-bone/[0.015] backdrop-blur-sm overflow-hidden">
+    <footer className="relative mt-12 mx-6 md:mx-12 lg:mx-20 mb-6 rounded-2xl border border-bone/[0.08] bg-bone/[0.04] backdrop-blur-xl shadow-[inset_0_1px_0_0_rgba(245,240,232,0.06),0_0_40px_rgba(200,241,53,0.03)] overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-br from-lime/[0.02] via-transparent to-transparent pointer-events-none" />
 
       <div className="relative max-w-6xl mx-auto px-8 py-8">
