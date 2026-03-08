@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence, useMotionValue, useSpring } from 'framer-motion';
+import { motion, AnimatePresence, useMotionValue, useSpring, useScroll, useTransform } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import Footer from '../components/Footer';
 
@@ -27,321 +27,126 @@ const itemFade = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease } },
 };
 
-const chatMessages = [
-  { from: 'user', text: 'Can I spend ₹200 on lunch?' },
-  { from: 'lim', expression: 'thinking', text: 'Checking your budget for today...' },
-  { from: 'lim', expression: 'happy', text: 'Yes! ₹200 fits perfectly. You\'ll have ₹267 left today. Enjoy! 🍜' },
-];
 
-function HeroShowcase() {
-  const [view, setView] = useState(0); // 0 = budget, 1 = chat
-  const [chatStep, setChatStep] = useState(0);
-  const [amount, setAmount] = useState(0);
 
-  // Cycle between budget and chat views
-  useEffect(() => {
-    const timer = setTimeout(() => setView((v) => (v + 1) % 2), view === 0 ? 5000 : 7000);
-    return () => clearTimeout(timer);
-  }, [view]);
-
-  // Animate the amount counting up
-  useEffect(() => {
-    if (view !== 0) { setAmount(0); return; }
-    let frame;
-    const target = 467;
-    const duration = 1200;
-    const start = performance.now();
-    const tick = (now) => {
-      const progress = Math.min((now - start) / duration, 1);
-      const eased = 1 - Math.pow(1 - progress, 3);
-      setAmount(Math.round(eased * target));
-      if (progress < 1) frame = requestAnimationFrame(tick);
-    };
-    frame = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(frame);
-  }, [view]);
-
-  // Stagger chat messages
-  useEffect(() => {
-    if (view !== 1) { setChatStep(0); return; }
-    const timers = [
-      setTimeout(() => setChatStep(1), 600),
-      setTimeout(() => setChatStep(2), 2000),
-      setTimeout(() => setChatStep(3), 3500),
-    ];
-    return () => timers.forEach(clearTimeout);
-  }, [view]);
-
-  return (
-    <div className="relative h-[360px]">
-      <AnimatePresence mode="wait">
-        {view === 0 ? (
-          <motion.div
-            key="budget"
-            initial={{ opacity: 0, y: 16, rotateX: -4 }}
-            animate={{ opacity: 1, y: 0, rotateX: 0 }}
-            exit={{ opacity: 0, y: -12, rotateX: 4 }}
-            transition={{ duration: 0.5, ease }}
-            className="absolute inset-0"
-          >
-            <div className="card-elevated p-4 space-y-3">
-              {/* Header */}
-              <motion.div initial="hidden" animate="visible" variants={stagger}>
-                <motion.div variants={itemFade} className="flex items-center justify-between">
-                  <div className="flex items-center gap-2.5">
-                    <div className="w-6 h-6 rounded-lg bg-lime/20 flex items-center justify-center">
-                      <span className="text-lime text-[11px] font-bold">L</span>
-                    </div>
-                    <div>
-                      <div className="font-display font-bold text-[12px] text-bone/70">Today's Budget</div>
-                      <div className="font-mono text-[9px] text-bone/20 tracking-wider">March 7, 2026</div>
-                    </div>
-                  </div>
-                  <div className="w-2 h-2 rounded-full bg-lime/50 animate-pulse" />
-                </motion.div>
-
-                {/* Amount */}
-                <motion.div variants={itemFade} className="text-center py-2">
-                  <div className="font-display font-extrabold text-[2rem] text-bone tracking-tight leading-none tabular-nums">
-                    ₹{amount}
-                  </div>
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.8 }}
-                    className="font-mono text-[10px] text-lime/40 tracking-wider mt-1.5"
-                  >
-                    safe to spend
-                  </motion.div>
-                </motion.div>
-
-                {/* Progress */}
-                <motion.div variants={itemFade}>
-                  <div className="flex justify-between mb-2">
-                    <span className="font-mono text-[9px] text-bone/20">spent today</span>
-                    <span className="font-mono text-[9px] text-bone/30">₹183 / ₹650</span>
-                  </div>
-                  <div className="h-1.5 bg-bone/[0.04] rounded-full overflow-hidden">
-                    <motion.div
-                      initial={{ width: 0 }}
-                      animate={{ width: '28%' }}
-                      transition={{ delay: 0.6, duration: 1, ease }}
-                      className="h-full bg-lime/60 rounded-full"
-                    />
-                  </div>
-                </motion.div>
-
-                {/* LIM hint */}
-                <motion.div variants={itemFade} className="bg-bone/[0.03] rounded-lg p-2.5 border border-bone/[0.04]">
-                  <div className="flex items-start gap-2">
-                    <div className="w-4 h-4 rounded bg-lime/15 flex items-center justify-center shrink-0 mt-0.5">
-                      <span className="text-lime text-[8px] font-bold">L</span>
-                    </div>
-                    <p className="font-mono text-[9px] text-bone/35 leading-[1.6]">
-                      You're on track! Save ₹1,200 this month.
-                    </p>
-                  </div>
-                </motion.div>
-
-                {/* Stats */}
-                <motion.div variants={itemFade} className="grid grid-cols-3 gap-1.5">
-                  {[
-                    { label: 'Streak', val: '8 days' },
-                    { label: 'Saved', val: '₹2.4k' },
-                    { label: 'Score', val: '82' },
-                  ].map((s) => (
-                    <div key={s.label} className="text-center py-1.5 bg-bone/[0.02] rounded-lg">
-                      <div className="font-display font-bold text-[10px] text-bone/60">{s.val}</div>
-                      <div className="font-mono text-[7px] text-bone/15 tracking-wider mt-0.5">{s.label}</div>
-                    </div>
-                  ))}
-                </motion.div>
-              </motion.div>
-            </div>
-          </motion.div>
-        ) : (
-          <motion.div
-            key="chat"
-            initial={{ opacity: 0, y: 16, rotateX: -4 }}
-            animate={{ opacity: 1, y: 0, rotateX: 0 }}
-            exit={{ opacity: 0, y: -12, rotateX: 4 }}
-            transition={{ duration: 0.5, ease }}
-            className="absolute inset-0"
-          >
-            <div className="card-elevated p-4 h-full flex flex-col">
-              {/* Chat header */}
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="flex items-center gap-2.5 pb-3 border-b border-bone/[0.04] mb-3"
-              >
-                <div className="relative">
-                  <div className="w-6 h-6 rounded-lg bg-lime/20 flex items-center justify-center">
-                    <span className="text-lime text-[11px] font-bold">L</span>
-                  </div>
-                  <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-lime/70 border-2 border-card" />
-                </div>
-                <div>
-                  <div className="font-display font-bold text-[12px] text-bone/70">LIM AI</div>
-                  <div className="font-mono text-[9px] text-lime/35 tracking-wider">online · ready to help</div>
-                </div>
-              </motion.div>
-
-              {/* Messages */}
-              <div className="flex-1 space-y-2.5 overflow-hidden">
-                <AnimatePresence>
-                  {chatStep >= 1 && (
-                    <motion.div
-                      key="msg-0"
-                      initial={{ opacity: 0, y: 10, scale: 0.97 }}
-                      animate={{ opacity: 1, y: 0, scale: 1 }}
-                      transition={{ duration: 0.35, ease }}
-                      className="flex justify-end"
-                    >
-                      <div className="bg-lime/[0.06] border border-lime/[0.1] rounded-2xl rounded-tr-md px-3 py-2 max-w-[85%]">
-                        <p className="font-mono text-[10px] text-lime/50">{chatMessages[0].text}</p>
-                      </div>
-                    </motion.div>
-                  )}
-
-                  {chatStep >= 2 && (
-                    <motion.div
-                      key="msg-1"
-                      initial={{ opacity: 0, y: 10, scale: 0.97 }}
-                      animate={{ opacity: 1, y: 0, scale: 1 }}
-                      transition={{ duration: 0.35, ease }}
-                      className="flex items-start gap-2.5"
-                    >
-                      <div className="w-5 h-5 rounded bg-lime/15 flex items-center justify-center shrink-0">
-                        <span className="text-lime text-[9px] font-bold">L</span>
-                      </div>
-                      <div className="bg-bone/[0.04] rounded-2xl rounded-tl-md px-3 py-2 border border-bone/[0.04]">
-                        <div className="flex items-center gap-1.5">
-                          <motion.div
-                            animate={{ opacity: [0.3, 1, 0.3] }}
-                            transition={{ duration: 1.2, repeat: Infinity }}
-                            className="flex gap-1"
-                          >
-                            <span className="w-1 h-1 rounded-full bg-bone/30" />
-                            <span className="w-1 h-1 rounded-full bg-bone/30" />
-                            <span className="w-1 h-1 rounded-full bg-bone/30" />
-                          </motion.div>
-                          <p className="font-mono text-[10px] text-bone/35">{chatMessages[1].text}</p>
-                        </div>
-                      </div>
-                    </motion.div>
-                  )}
-
-                  {chatStep >= 3 && (
-                    <motion.div
-                      key="msg-2"
-                      initial={{ opacity: 0, y: 10, scale: 0.97 }}
-                      animate={{ opacity: 1, y: 0, scale: 1 }}
-                      transition={{ duration: 0.35, ease }}
-                      className="flex items-start gap-2.5"
-                    >
-                      <div className="w-5 h-5 rounded bg-lime/15 flex items-center justify-center shrink-0">
-                        <span className="text-lime text-[9px] font-bold">L</span>
-                      </div>
-                      <div className="bg-bone/[0.04] rounded-2xl rounded-tl-md px-3 py-2 border border-bone/[0.04]">
-                        <p className="font-mono text-[10px] text-bone/45 leading-[1.6]">{chatMessages[2].text}</p>
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-
-              {/* Fake input */}
-              <div className="mt-3 pt-2.5 border-t border-bone/[0.04]">
-                <div className="flex items-center gap-2 bg-bone/[0.02] rounded-lg px-2.5 py-2 border border-bone/[0.04]">
-                  <span className="font-mono text-[10px] text-bone/15 flex-1">Ask LIM anything...</span>
-                  <div className="w-6 h-6 rounded-lg bg-lime/10 flex items-center justify-center">
-                    <svg className="w-3 h-3 text-lime/50" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M4.5 10.5L12 3m0 0l7.5 7.5M12 3v18" /></svg>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* View indicator dots */}
-      <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 flex gap-2">
-        {[0, 1].map((i) => (
-          <button
-            key={i}
-            onClick={() => setView(i)}
-            className={`w-1.5 h-1.5 rounded-full transition-all duration-300 cursor-pointer ${view === i ? 'bg-lime/50 w-4' : 'bg-bone/10'
-              }`}
-          />
-        ))}
-      </div>
-    </div>
-  );
-}
 
 export default function Landing() {
   const [activeStep, setActiveStep] = useState(0);
+  const [heroImageIndex, setHeroImageIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setHeroImageIndex((prev) => (prev === 0 ? 1 : 0));
+    }, 4000); // toggle every 4 seconds
+    return () => clearInterval(interval);
+  }, []);
 
   const handleNext = () => setActiveStep((prev) => Math.min(2, prev + 1));
   const handlePrev = () => setActiveStep((prev) => Math.max(0, prev - 1));
 
+  const heroRef = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: heroRef,
+    offset: ["start start", "end start"],
+  });
+
+  const rotateX = useTransform(scrollYProgress, [0, 0.5], [20, 0]);
+  const scale = useTransform(scrollYProgress, [0, 0.5], [0.95, 1]);
+  const opacity = useTransform(scrollYProgress, [0, 0.3], [0.5, 1]);
   return (
-    <div className="min-h-screen bg-ink grain relative overflow-hidden">
+    <div className="min-h-screen bg-ink grain relative overflow-x-hidden">
 
       {/* Hero */}
-      <section className="relative min-h-[100vh] flex flex-col justify-center px-6 md:px-12 lg:px-20 overflow-hidden">
-        <div className="absolute top-[-20%] right-[-10%] w-[700px] h-[700px] rounded-full bg-lime/[0.035] blur-[180px] pointer-events-none" />
-        <div className="absolute bottom-[-10%] left-[-5%] w-[400px] h-[400px] rounded-full bg-rust/[0.02] blur-[120px] pointer-events-none" />
+      <section ref={heroRef} className="relative w-full overflow-hidden min-h-[90svh] lg:min-h-[100vh] pt-[10vh] lg:pt-[12vh] pb-[4vh] lg:pb-[6vh] px-4 sm:px-6 md:px-12 lg:px-20 flex flex-col justify-center">
+        {/* Animated Background Orbs */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <motion.div
+            className="absolute -top-[10%] right-[-5%] w-[800px] h-[800px] rounded-full bg-lime/[0.035] blur-[200px]"
+            animate={{
+              x: ['0%', '-20%', '0%'],
+              y: ['0%', '15%', '0%'],
+              scale: [1, 1.15, 1],
+            }}
+            transition={{ duration: 25, repeat: Infinity, ease: 'easeInOut' }}
+          />
+          <motion.div
+            className="absolute bottom-[-10%] left-[-10%] w-[600px] h-[600px] rounded-full bg-rust/[0.02] blur-[150px]"
+            animate={{
+              x: ['0%', '30%', '0%'],
+              y: ['0%', '-20%', '0%'],
+              scale: [0.9, 1.1, 0.9],
+            }}
+            transition={{ duration: 20, repeat: Infinity, ease: 'easeInOut', delay: 3 }}
+          />
+        </div>
 
-        <div className="max-w-7xl mx-auto w-full relative z-10 pt-28">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            {/* Left — Copy */}
-            <motion.div initial="hidden" animate="visible" className="flex flex-col gap-6">
-              <motion.h1 variants={fadeUp} custom={1} className="font-display font-extrabold text-bone leading-[0.95] tracking-[-0.03em] text-[clamp(2.4rem,5vw,4rem)]">
-                Control your money{' '}
-                <span className="text-lime">before it controls</span>{' '}
-                <span className="font-serif italic font-normal text-bone/40">you.</span>
-              </motion.h1>
+        <div className="max-w-[1400px] mx-auto w-full relative z-10 flex flex-col-reverse lg:grid lg:grid-cols-2 gap-0 lg:gap-8 items-center mt-4 lg:mt-0">
 
-              <motion.div variants={fadeUp} custom={3} className="flex flex-wrap items-center gap-4 mt-1">
-                <Link to="/signup" className="group inline-flex items-center gap-2.5 bg-lime text-ink font-display font-bold text-[13px] px-7 py-3.5 rounded-2xl transition-all duration-300 hover:shadow-[0_8px_40px_rgba(200,241,53,0.2)] hover:-translate-y-0.5 active:translate-y-0 relative overflow-hidden">
-                  <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/[0.07] to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-700" />
-                  Start Managing
-                  <svg className="w-4 h-4 transition-transform group-hover:translate-x-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
-                </Link>
-                <a href="#how-it-works" className="font-mono text-[11px] text-bone/30 hover:text-bone/60 transition-colors tracking-wider">
-                  See how it works →
-                </a>
-              </motion.div>
+          {/* Left Text Column */}
+          <div className="flex flex-col items-center text-center lg:items-start lg:text-left max-w-2xl mx-auto lg:mx-0 relative z-20 lg:z-10 w-full pt-16 lg:pt-0 -mt-[15vh] lg:mt-0 pb-6 lg:pb-0">
 
-              {/* Social proof strip */}
-              <motion.div variants={fadeUp} custom={4} className="flex items-center gap-5 mt-2">
-                <div className="flex -space-x-2">
-                  {['#C8F135', '#A8BFA0', '#D4A843', '#E85D3A'].map((c, i) => (
-                    <div key={i} className="w-7 h-7 rounded-full border-2 border-ink" style={{ background: c }} />
-                  ))}
-                </div>
-                <div>
-                  <span className="font-display font-bold text-[13px] text-bone/70">2,400+</span>
-                  <span className="font-mono text-[10px] text-bone/20 ml-1.5 tracking-wide">students saving smarter</span>
-                </div>
-              </motion.div>
-            </motion.div>
+            {/* Smooth Frosted Glass Overlay for Mobile */}
+            <div className="absolute inset-x-0 -top-16 -mx-[5vw] -bottom-[30vh] pointer-events-none -z-10 lg:hidden overflow-hidden">
+              <div className="absolute inset-x-0 -top-0 bottom-0 bg-gradient-to-t from-ink via-ink/90 to-transparent" />
+              <div className="absolute inset-x-0 -top-0 bottom-0 backdrop-blur-[12px] [mask-image:linear-gradient(to_bottom,transparent_0%,black_35%)]" />
+            </div>
 
-            {/* Right — HeroShowcase */}
-            <motion.div
+            <motion.h1
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5, duration: 0.9, ease }}
-              className="hidden lg:flex justify-end"
+              transition={{ duration: 0.8, delay: 0.1, ease: [0.25, 1, 0.5, 1] }}
+              className="font-display font-bold text-bone leading-[1.05] md:leading-[0.9] tracking-tight text-[clamp(2.15rem,7.5vw,5.5rem)] mb-3 lg:mb-6 text-balance"
             >
-              <div className="relative w-[340px]">
-                <div className="absolute -inset-16 bg-lime/[0.04] blur-[80px] rounded-full pointer-events-none" />
-                <HeroShowcase />
-              </div>
+              Control your money <br className="hidden md:block lg:block" />
+              <span className="text-lime">before it controls</span>{' '}
+              <span className="font-serif italic font-normal text-bone/40">you.</span>
+            </motion.h1>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.3, ease: [0.25, 1, 0.5, 1] }}
+              className="flex flex-wrap items-center justify-center lg:justify-start gap-4"
+            >
+              <Link to="/signup" className="group inline-flex items-center justify-center gap-2.5 bg-lime text-ink font-display font-bold text-[14px] px-8 py-4 rounded-2xl transition-all duration-300 hover:shadow-[0_8px_40px_rgba(200,241,53,0.25)] hover:-translate-y-0.5 active:translate-y-0 relative overflow-hidden min-w-[200px]">
+                <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/[0.07] to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-700" />
+                Get Started Free
+                <svg className="w-4 h-4 transition-transform group-hover:translate-x-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
+              </Link>
             </motion.div>
           </div>
+
+          {/* Right Image/Mockup Column */}
+          <div className="relative w-full h-[350px] sm:h-[450px] lg:h-[550px] flex items-center justify-center pointer-events-none perspective-[2000px] z-10 -ml-2 lg:ml-0 overflow-visible">
+            <AnimatePresence>
+              {heroImageIndex === 0 && (
+                <motion.img
+                  key="dashboard"
+                  src="/dashboard-tilted.png"
+                  alt="LIM Dashboard Mockup"
+                  initial={{ opacity: 0, scale: 0.95, filter: 'blur(10px)' }}
+                  animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
+                  exit={{ opacity: 0, scale: 1.05, filter: 'blur(10px)' }}
+                  transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+                  className="absolute w-[95%] max-w-[340px] sm:max-w-[450px] lg:max-w-[500px] xl:max-w-[550px] drop-shadow-[0_20px_40px_rgba(0,0,0,0.5)] lg:drop-shadow-[0_45px_100px_rgba(0,0,0,0.6)] z-10 pb-12 lg:pb-0"
+                  style={{ rotateY: rotateX }}
+                />
+              )}
+              {heroImageIndex === 1 && (
+                <motion.img
+                  key="limai"
+                  src="/lim.png"
+                  alt="LIM AI Chat Interface Mockup"
+                  initial={{ opacity: 0, scale: 0.95, filter: 'blur(10px)' }}
+                  animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
+                  exit={{ opacity: 0, scale: 1.05, filter: 'blur(10px)' }}
+                  transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+                  className="absolute w-[280px] sm:w-[360px] lg:w-[380px] xl:w-[420px] drop-shadow-[0_20px_40px_rgba(0,0,0,0.5)] lg:drop-shadow-[0_45px_100px_rgba(0,0,0,0.6)] z-10 pb-12 lg:pb-0"
+                />
+              )}
+            </AnimatePresence>
+          </div>
+
         </div>
       </section>
 
@@ -590,9 +395,43 @@ export default function Landing() {
       </section >
 
       {/* CTA */}
-      < section className="py-24 px-6 md:px-12 lg:px-20 relative overflow-hidden" >
-        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-bone/[0.06] to-transparent" />
-        <div className="absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-lime/[0.03] rounded-full blur-[200px] pointer-events-none" />
+      <section className="py-24 px-6 md:px-12 lg:px-20 relative overflow-hidden" >
+        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-bone/[0.06] to-transparent z-10" />
+
+        {/* Animated Background Orbs */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          {/* Main Lime Orb - sweeps across */}
+          <motion.div
+            className="absolute -top-[10%] -left-[10%] w-[500px] h-[500px] bg-lime/[0.04] rounded-full blur-[150px]"
+            animate={{
+              x: ['0%', '50%', '0%'],
+              y: ['0%', '30%', '0%'],
+              scale: [1, 1.2, 1],
+            }}
+            transition={{ duration: 18, repeat: Infinity, ease: 'easeInOut' }}
+          />
+
+          {/* Secondary Bone Orb - rises from bottom right */}
+          <motion.div
+            className="absolute -bottom-[20%] -right-[10%] w-[400px] h-[400px] bg-bone/[0.03] rounded-full blur-[120px]"
+            animate={{
+              x: ['0%', '-40%', '0%'],
+              y: ['0%', '-30%', '0%'],
+            }}
+            transition={{ duration: 22, repeat: Infinity, ease: 'easeInOut', delay: 2 }}
+          />
+
+          {/* Small Accent Rust Orb - gentle drift in center */}
+          <motion.div
+            className="absolute top-[30%] left-[30%] w-[300px] h-[300px] bg-rust/[0.02] rounded-full blur-[100px]"
+            animate={{
+              x: ['0%', '20%', '0%'],
+              y: ['0%', '-20%', '0%'],
+              scale: [0.8, 1, 0.8],
+            }}
+            transition={{ duration: 15, repeat: Infinity, ease: 'easeInOut', delay: 5 }}
+          />
+        </div>
 
         <div className="max-w-3xl mx-auto text-center relative z-10">
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-80px' }}>
