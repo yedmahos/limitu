@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { useEffect } from 'react';
 import { AppProvider, useApp } from './context/AppContext';
 import Navbar from './components/Navbar';
 import { RouteProgressBar, PageTransition } from './components/PageTransition';
@@ -13,6 +14,7 @@ import Profile from './pages/Profile';
 import ForgotPassword from './pages/ForgotPassword';
 import Team from './pages/Team';
 import About from './pages/About';
+import Contact from './pages/Contact';
 
 function ProtectedRoute({ children }) {
   const { user } = useApp();
@@ -38,15 +40,25 @@ function AnimatedRoutes() {
         <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
         <Route path="/team" element={<Team />} />
         <Route path="/about" element={<About />} />
+        <Route path="/contact" element={<Contact />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </PageTransition>
   );
 }
 
+function ScrollToTop() {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+  }, [pathname]);
+  return null;
+}
+
 function AppRoutes() {
   return (
     <>
+      <ScrollToTop />
       <RouteProgressBar />
       <Navbar />
       <AnimatedRoutes />

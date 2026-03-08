@@ -84,7 +84,7 @@ export default function Navbar() {
   useEffect(() => { setMobileOpen(false); }, [location.pathname]);
 
   // Do not render navbar on auth pages
-  if (location.pathname === '/signin' || location.pathname === '/signup') {
+  if (location.pathname === '/signin' || location.pathname === '/signup' || location.pathname === '/forgot-password') {
     return null;
   }
 

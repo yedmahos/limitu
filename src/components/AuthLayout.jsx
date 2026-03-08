@@ -5,6 +5,7 @@ import Logo from './Logo';
 export default function AuthLayout({ children }) {
     const location = useLocation();
     const isSignIn = location.pathname === '/signin';
+    const isForgotPw = location.pathname === '/forgot-password';
 
     return (
         <div className="min-h-[100dvh] lg:h-[100dvh] lg:min-h-0 flex grain relative lg:overflow-hidden bg-ink">
@@ -99,32 +100,36 @@ export default function AuthLayout({ children }) {
                     <div className="w-full lg:bg-white/[0.02] lg:border lg:border-white/[0.05] lg:rounded-[2rem] lg:p-6 xl:p-8 lg:shadow-2xl lg:backdrop-blur-xl">
 
                         {/* Mobile Logo centered above form */}
-                        <div className="lg:hidden flex justify-center mb-4">
-                            <Logo size={28} />
-                        </div>
+                        {!isForgotPw && (
+                            <div className="lg:hidden flex justify-center mb-4">
+                                <Logo size={28} />
+                            </div>
+                        )}
 
                         {/* Auth Mode Toggle Pill (Mobile & Desktop) */}
-                        <motion.div
-                            initial={{ opacity: 0, y: -20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.1, duration: 0.5 }}
-                            className="mb-6 w-full"
-                        >
-                            <div className="flex bg-bone/[0.04] rounded-2xl p-1.5 border border-bone/[0.06] backdrop-blur-md shadow-inner">
-                                <Link
-                                    to="/signin"
-                                    className={`flex-1 py-2.5 text-center rounded-xl font-display font-bold text-[13px] tracking-wide transition-all duration-300 ${isSignIn ? 'bg-lime text-ink shadow-[0_4px_16px_rgba(200,241,53,0.2)] cursor-default' : 'text-bone/40 hover:text-bone/70 cursor-pointer'}`}
-                                >
-                                    Sign In
-                                </Link>
-                                <Link
-                                    to="/signup"
-                                    className={`flex-1 py-2.5 text-center rounded-xl font-display font-bold text-[13px] tracking-wide transition-all duration-300 ${!isSignIn ? 'bg-lime text-ink shadow-[0_4px_16px_rgba(200,241,53,0.2)] cursor-default' : 'text-bone/40 hover:text-bone/70 cursor-pointer'}`}
-                                >
-                                    Sign Up
-                                </Link>
-                            </div>
-                        </motion.div>
+                        {!isForgotPw && (
+                            <motion.div
+                                initial={{ opacity: 0, y: -20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: 0.1, duration: 0.5 }}
+                                className="mb-6 w-full"
+                            >
+                                <div className="flex bg-bone/[0.04] rounded-2xl p-1.5 border border-bone/[0.06] backdrop-blur-md shadow-inner">
+                                    <Link
+                                        to="/signin"
+                                        className={`flex-1 py-2.5 text-center rounded-xl font-display font-bold text-[13px] tracking-wide transition-all duration-300 ${isSignIn ? 'bg-lime text-ink shadow-[0_4px_16px_rgba(200,241,53,0.2)] cursor-default' : 'text-bone/40 hover:text-bone/70 cursor-pointer'}`}
+                                    >
+                                        Sign In
+                                    </Link>
+                                    <Link
+                                        to="/signup"
+                                        className={`flex-1 py-2.5 text-center rounded-xl font-display font-bold text-[13px] tracking-wide transition-all duration-300 ${!isSignIn ? 'bg-lime text-ink shadow-[0_4px_16px_rgba(200,241,53,0.2)] cursor-default' : 'text-bone/40 hover:text-bone/70 cursor-pointer'}`}
+                                    >
+                                        Sign Up
+                                    </Link>
+                                </div>
+                            </motion.div>
+                        )}
 
                         {/* Child Form Container */}
                         <div className="w-full">

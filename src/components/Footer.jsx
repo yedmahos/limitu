@@ -14,9 +14,12 @@ export default function Footer() {
           </div>
 
           <div className="flex items-center gap-1">
-            {['Privacy', 'Terms', 'Contact'].map((l) => (
+            {['Privacy', 'Terms'].map((l) => (
               <span key={l} className="font-mono text-[10px] text-bone/40 hover:text-lime/60 px-3 py-1.5 rounded-lg hover:bg-lime/[0.04] cursor-pointer transition-all duration-200 tracking-wider">{l}</span>
             ))}
+            <Link to="/contact" className="font-mono text-[10px] text-bone/40 hover:text-lime/60 px-3 py-1.5 rounded-lg hover:bg-lime/[0.04] transition-all duration-200 tracking-wider">
+              Contact
+            </Link>
           </div>
         </div>
 
