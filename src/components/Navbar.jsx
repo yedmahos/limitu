@@ -83,6 +83,11 @@ export default function Navbar() {
   // Close mobile menu on route change
   useEffect(() => { setMobileOpen(false); }, [location.pathname]);
 
+  // Do not render navbar on auth pages
+  if (location.pathname === '/signin' || location.pathname === '/signup') {
+    return null;
+  }
+
   return (
     <nav className="fixed top-0 left-0 right-0 z-[10000] pointer-events-auto">
 
@@ -115,16 +120,18 @@ export default function Navbar() {
                   <span className={`transition-colors duration-200 ${isActive ? 'text-lime' : 'text-bone/45 hover:text-bone/80'}`}>Team</span>
                 )}
               </AnimatedNavLink>
-              <NavLink to="/signin">
-                <motion.span
-                  className="inline-block font-display text-[11px] bg-lime text-ink px-3 sm:px-5 py-2 rounded-xl tracking-wide font-bold whitespace-nowrap"
-                  whileHover={{ scale: 1.05, boxShadow: '0 4px 20px rgba(200,241,53,0.3)' }}
-                  whileTap={{ scale: 0.97 }}
-                  transition={{ duration: 0.16 }}
-                >
-                  Get Started
-                </motion.span>
-              </NavLink>
+              {!(location.pathname === '/signin' || location.pathname === '/signup') && (
+                <NavLink to="/signin">
+                  <motion.span
+                    className="inline-block font-display text-[11px] bg-lime text-ink px-3 sm:px-5 py-2 rounded-xl tracking-wide font-bold whitespace-nowrap"
+                    whileHover={{ scale: 1.05, boxShadow: '0 4px 20px rgba(200,241,53,0.3)' }}
+                    whileTap={{ scale: 0.97 }}
+                    transition={{ duration: 0.16 }}
+                  >
+                    Get Started
+                  </motion.span>
+                </NavLink>
+              )}
             </div>
           </motion.div>
         </div>

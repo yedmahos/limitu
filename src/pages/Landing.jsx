@@ -333,29 +333,75 @@ export default function Landing() {
               </p>
               <div className="flex flex-wrap gap-2">
                 {['"Why is my limit low?"', '"Can I spend ₹200?"', '"When will I run out?"'].map((q) => (
-                  <span key={q} className="font-mono text-[10px] text-lime/35 bg-lime/[0.04] px-3 py-1.5 rounded-full border border-lime/[0.06]">{q}</span>
+                  <motion.button
+                    key={q}
+                    whileHover={{ scale: 1.05, backgroundColor: 'rgba(200, 241, 53, 0.08)' }}
+                    whileTap={{ scale: 0.95 }}
+                    className="font-mono text-[10px] text-lime/35 bg-lime/[0.04] px-3 py-1.5 rounded-full border border-lime/[0.06] transition-colors cursor-pointer"
+                  >
+                    {q}
+                  </motion.button>
                 ))}
               </div>
             </motion.div>
-            <motion.div variants={fadeUp} custom={1}>
-              <div className="card-elevated p-5 space-y-3">
-                <div className="flex items-start gap-3">
-                  <div className="shrink-0 mt-0.5"><div className="w-7 h-7 rounded-lg bg-lime/20 flex items-center justify-center"><span className="text-lime text-[12px] font-bold">L</span></div></div>
-                  <div className="bg-bone/[0.04] rounded-2xl rounded-tl-md px-4 py-3 border border-bone/[0.04]">
-                    <p className="font-mono text-[11px] text-bone/45 leading-[1.8]">Your limit is ₹400 today. Adjusted for this week — more room by Thursday!</p>
-                  </div>
-                </div>
-                <div className="flex justify-end">
-                  <div className="bg-lime/[0.06] border border-lime/[0.1] rounded-2xl rounded-tr-md px-4 py-3 max-w-[75%]">
-                    <p className="font-mono text-[11px] text-lime/50">Can I spend ₹200 on lunch?</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3">
-                  <div className="shrink-0 mt-0.5"><div className="w-7 h-7 rounded-lg bg-lime/20 flex items-center justify-center"><span className="text-lime text-[12px] font-bold">L</span></div></div>
-                  <div className="bg-bone/[0.04] rounded-2xl rounded-tl-md px-4 py-3 border border-bone/[0.04]">
-                    <p className="font-mono text-[11px] text-bone/45 leading-[1.8]">Yes! ₹200 fits. You'll have ₹120 left. Enjoy! 🍜</p>
-                  </div>
-                </div>
+
+            <motion.div
+              initial={{ y: 0 }}
+              animate={{ y: [-10, 10, -10] }}
+              transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
+            >
+              <div className="card-elevated p-5 space-y-3 relative">
+                {/* Glow behind chat */}
+                <div className="absolute inset-0 bg-lime/[0.02] rounded-3xl blur-2xl -z-10" />
+
+                <motion.div
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true, margin: '-50px' }}
+                  variants={{
+                    visible: { transition: { staggerChildren: 0.6 } }
+                  }}
+                  className="space-y-4"
+                >
+                  <motion.div
+                    variants={fadeUp}
+                    className="flex items-start gap-3"
+                  >
+                    <div className="shrink-0 mt-0.5"><div className="w-7 h-7 rounded-lg bg-lime/20 flex items-center justify-center"><span className="text-lime text-[12px] font-bold">L</span></div></div>
+                    <div className="bg-bone/[0.04] rounded-2xl rounded-tl-md px-4 py-3 border border-bone/[0.04]">
+                      <p className="font-mono text-[11px] text-bone/45 leading-[1.8]">Your limit is ₹400 today. Adjusted for this week — more room by Thursday!</p>
+                    </div>
+                  </motion.div>
+
+                  <motion.div
+                    variants={{
+                      hidden: { opacity: 0, scale: 0.9, x: 20 },
+                      visible: { opacity: 1, scale: 1, x: 0, transition: { type: 'spring', damping: 20, stiffness: 100 } }
+                    }}
+                    className="flex justify-end"
+                  >
+                    <div className="bg-lime/[0.06] border border-lime/[0.1] rounded-2xl rounded-tr-md px-4 py-3 max-w-[75%]">
+                      <p className="font-mono text-[11px] text-lime/50">Can I spend ₹200 on lunch?</p>
+                    </div>
+                  </motion.div>
+
+                  <motion.div
+                    variants={fadeUp}
+                    className="flex items-start gap-3"
+                  >
+                    <div className="shrink-0 mt-0.5"><div className="w-7 h-7 rounded-lg bg-lime/20 flex items-center justify-center relative">
+                      <span className="text-lime text-[12px] font-bold">L</span>
+                      <motion.div
+                        className="absolute -right-1 -top-1 w-2 h-2 bg-lime rounded-full"
+                        animate={{ opacity: [1, 0.5, 1] }}
+                        transition={{ duration: 1.5, repeat: Infinity }}
+                      />
+                    </div></div>
+                    <div className="bg-bone/[0.04] rounded-2xl rounded-tl-md px-4 py-3 border border-bone/[0.04]">
+                      <p className="font-mono text-[11px] text-bone/45 leading-[1.8]">Yes! ₹200 fits. You'll have ₹120 left. Enjoy! 🍜</p>
+                    </div>
+                  </motion.div>
+                </motion.div>
               </div>
             </motion.div>
           </motion.div>
