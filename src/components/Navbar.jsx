@@ -110,28 +110,54 @@ export default function Navbar() {
             </NavLink>
 
             <div className="flex items-center gap-3 sm:gap-6">
-              <AnimatedNavLink to="/about" className="font-mono text-[11px] tracking-wide">
-                {({ isActive }) => (
-                  <span className={`transition-colors duration-200 ${isActive ? 'text-lime' : 'text-bone/45 hover:text-bone/80'}`}>About</span>
+              <div className="hidden md:flex items-center gap-3 sm:gap-6">
+                <AnimatedNavLink to="/about" className="font-mono text-[11px] tracking-wide">
+                  {({ isActive }) => (
+                    <span className={`transition-colors duration-200 ${isActive ? 'text-lime' : 'text-bone/45 hover:text-bone/80'}`}>About</span>
+                  )}
+                </AnimatedNavLink>
+                <AnimatedNavLink to="/team" className="font-mono text-[11px] tracking-wide">
+                  {({ isActive }) => (
+                    <span className={`transition-colors duration-200 ${isActive ? 'text-lime' : 'text-bone/45 hover:text-bone/80'}`}>Team</span>
+                  )}
+                </AnimatedNavLink>
+                {!(location.pathname === '/signin' || location.pathname === '/signup') && (
+                  <NavLink to="/signin">
+                    <motion.span
+                      className="inline-block font-display text-[11px] bg-lime text-ink px-3 sm:px-5 py-2 rounded-xl tracking-wide font-bold whitespace-nowrap"
+                      whileHover={{ scale: 1.05, boxShadow: '0 4px 20px rgba(200,241,53,0.3)' }}
+                      whileTap={{ scale: 0.97 }}
+                      transition={{ duration: 0.16 }}
+                    >
+                      Get Started
+                    </motion.span>
+                  </NavLink>
                 )}
-              </AnimatedNavLink>
-              <AnimatedNavLink to="/team" className="font-mono text-[11px] tracking-wide">
-                {({ isActive }) => (
-                  <span className={`transition-colors duration-200 ${isActive ? 'text-lime' : 'text-bone/45 hover:text-bone/80'}`}>Team</span>
-                )}
-              </AnimatedNavLink>
-              {!(location.pathname === '/signin' || location.pathname === '/signup') && (
-                <NavLink to="/signin">
-                  <motion.span
-                    className="inline-block font-display text-[11px] bg-lime text-ink px-3 sm:px-5 py-2 rounded-xl tracking-wide font-bold whitespace-nowrap"
-                    whileHover={{ scale: 1.05, boxShadow: '0 4px 20px rgba(200,241,53,0.3)' }}
-                    whileTap={{ scale: 0.97 }}
-                    transition={{ duration: 0.16 }}
-                  >
-                    Get Started
-                  </motion.span>
-                </NavLink>
-              )}
+              </div>
+
+              {/* Mobile hamburger */}
+              <motion.button
+                className="md:hidden flex flex-col gap-[5px] p-2 cursor-pointer"
+                onClick={() => setMobileOpen((v) => !v)}
+                whileTap={{ scale: 0.93 }}
+                aria-label="Toggle menu"
+              >
+                <motion.span
+                  className="block h-[1.5px] w-5 bg-bone/60 rounded-full origin-center"
+                  animate={mobileOpen ? { rotate: 45, y: 6.5 } : { rotate: 0, y: 0 }}
+                  transition={{ duration: 0.22 }}
+                />
+                <motion.span
+                  className="block h-[1.5px] w-5 bg-bone/60 rounded-full"
+                  animate={mobileOpen ? { opacity: 0, scaleX: 0 } : { opacity: 1, scaleX: 1 }}
+                  transition={{ duration: 0.18 }}
+                />
+                <motion.span
+                  className="block h-[1.5px] w-5 bg-bone/60 rounded-full origin-center"
+                  animate={mobileOpen ? { rotate: -45, y: -6.5 } : { rotate: 0, y: 0 }}
+                  transition={{ duration: 0.22 }}
+                />
+              </motion.button>
             </div>
           </motion.div>
         </div>
@@ -206,6 +232,70 @@ export default function Navbar() {
           </motion.div>
         </div>
       )}
+
+      {/* Mobile drawer (logged out) */}
+      <AnimatePresence>
+        {!user && mobileOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.28, ease: [0.25, 1, 0.5, 1] }}
+            className="md:hidden overflow-hidden px-3 sm:px-5 mt-1"
+          >
+            <div className="bg-ink/90 backdrop-blur-xl border border-white/[0.07] rounded-2xl p-3 flex flex-col gap-0.5 shadow-[0_8px_32px_rgba(0,0,0,0.3)] mx-auto max-w-5xl">
+              <motion.div
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.05, duration: 0.22, ease: [0.25, 1, 0.5, 1] }}
+              >
+                <NavLink
+                  to="/about"
+                  className={({ isActive }) =>
+                    `block px-4 py-2.5 rounded-xl font-mono text-[12px] tracking-wide transition-all duration-200 ${isActive
+                      ? 'bg-lime/10 text-lime'
+                      : 'text-bone/40 hover:text-bone/70 hover:bg-white/[0.03]'
+                    }`
+                  }
+                >
+                  About
+                </NavLink>
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.1, duration: 0.22, ease: [0.25, 1, 0.5, 1] }}
+              >
+                <NavLink
+                  to="/team"
+                  className={({ isActive }) =>
+                    `block px-4 py-2.5 rounded-xl font-mono text-[12px] tracking-wide transition-all duration-200 ${isActive
+                      ? 'bg-lime/10 text-lime'
+                      : 'text-bone/40 hover:text-bone/70 hover:bg-white/[0.03]'
+                    }`
+                  }
+                >
+                  Team
+                </NavLink>
+              </motion.div>
+              {!(location.pathname === '/signin' || location.pathname === '/signup') && (
+                <div className="mt-1 pt-2 border-t border-white/[0.05]">
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.15 }}
+                    className="px-2"
+                  >
+                    <NavLink to="/signin" className="block w-full text-center font-display text-[12px] bg-lime text-ink px-4 py-3 rounded-xl tracking-wide font-bold mt-1">
+                      Get Started
+                    </NavLink>
+                  </motion.div>
+                </div>
+              )}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Mobile drawer (logged in) */}
       <AnimatePresence>
