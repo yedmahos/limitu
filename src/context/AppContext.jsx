@@ -15,6 +15,9 @@ const DEMO_DAILY_LIMITS = [400, 400, 400, 400, 400, 400, 400];
 const defaultProfile = {
   name: 'Student',
   email: 'student@limitu.app',
+  phone: '+1 201 555-0123',
+  avatar: '',
+  address: '70 Rainey Street, Apartment 146, Austin TX 78701',
   monthlyAllowance: 12000,
   fixedExpenses: 3000,
   weekendPref: 'equal',

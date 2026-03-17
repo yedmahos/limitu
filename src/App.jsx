@@ -11,6 +11,7 @@ import Simulator from './pages/Simulator';
 import LimAI from './pages/LimAI';
 import Insights from './pages/Insights';
 import Profile from './pages/Profile';
+import VerifyContact from './pages/VerifyContact';
 import ForgotPassword from './pages/ForgotPassword';
 import Team from './pages/Team';
 import About from './pages/About';
@@ -38,6 +39,7 @@ function AnimatedRoutes() {
         <Route path="/lim-ai" element={<ProtectedRoute><LimAI /></ProtectedRoute>} />
         <Route path="/insights" element={<ProtectedRoute><Insights /></ProtectedRoute>} />
         <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+        <Route path="/verify-contact" element={<ProtectedRoute><VerifyContact /></ProtectedRoute>} />
         <Route path="/team" element={<Team />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
