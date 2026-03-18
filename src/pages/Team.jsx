@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import Footer from '../components/Footer';
 
 const ease = [0.25, 1, 0.5, 1];
@@ -93,13 +94,13 @@ export default function Team() {
             </h2>
           </motion.div>
           <motion.div {...fadeUp(0.18)} className="shrink-0">
-            <a
-              href="mailto:team.limitu@gmail.com"
+            <Link
+              to="/contact"
               className="inline-flex items-center gap-2 font-mono text-[11px] bg-lime text-ink px-6 py-3 rounded-xl hover:bg-lime/85 transition-all tracking-wide font-medium"
             >
               Get in touch
               <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" /></svg>
-            </a>
+            </Link>
           </motion.div>
         </div>
       </section>

@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
 
@@ -39,6 +39,15 @@ export default function Profile() {
       .slice(0, 2)
       .toUpperCase();
   }, [draft.name, user?.name]);
+
+  const hasChanges = useMemo(() => {
+    if (!profile) return false;
+    const textFields = ['name', 'email', 'phone', 'address', 'weekendPref', 'avatar'];
+    const hasTextChanges = textFields.some(key => (draft[key] || '') !== (profile[key] || ''));
+    const hasNumChanges = Number(draft.monthlyAllowance || 0) !== Number(profile.monthlyAllowance || 0) ||
+                          Number(draft.fixedExpenses || 0) !== Number(profile.fixedExpenses || 0);
+    return hasTextChanges || hasNumChanges;
+  }, [draft, profile]);
 
   const netMonthly = Math.max(0, Number(draft.monthlyAllowance || 0) - Number(draft.fixedExpenses || 0));
   const monthlySaved = Math.max(0, netMonthly - spentThisMonth);
@@ -125,12 +134,7 @@ export default function Profile() {
                   <p className="font-mono text-[11px] text-bone/35 mt-1 truncate">{draft.email || user?.email}</p>
                 </div>
               </div>
-              <button
-                onClick={logout}
-                className="h-9 px-3 rounded-lg border border-bone/[0.08] text-bone/70 font-mono text-[10px] shrink-0"
-              >
-                Log Out
-              </button>
+
             </div>
             {avatarError ? <p className="font-mono text-[10px] text-rust/70 mt-2">{avatarError}</p> : null}
           </motion.section>
@@ -243,18 +247,15 @@ export default function Profile() {
               </div>
 
               <div className="flex items-center gap-2">
-                <button
-                  onClick={logout}
-                  className="h-10 px-4 rounded-xl border border-bone/[0.08] text-bone/70 hover:text-bone hover:border-bone/[0.16] transition font-mono text-[11px]"
-                >
-                  Log Out
-                </button>
+
+                {hasChanges && (
                 <button
                   onClick={onSave}
                   className="h-10 px-5 rounded-xl bg-lime text-ink hover:brightness-95 transition font-mono text-[11px]"
                 >
                   Save
                 </button>
+                )}
               </div>
             </div>
             {avatarError ? <p className="font-mono text-[10px] text-rust/70">{avatarError}</p> : null}
@@ -357,24 +358,34 @@ export default function Profile() {
         </div>
       </motion.div>
 
-      <div className="md:hidden fixed bottom-0 left-0 right-0 z-40 border-t border-bone/[0.08] bg-ink/90 backdrop-blur-xl px-4 py-3">
-        <div className="max-w-6xl mx-auto flex items-center gap-2">
-          <button
-            type="button"
-            onClick={onReset}
-            className="h-11 px-4 rounded-xl border border-bone/[0.12] text-bone/70 font-mono text-[11px]"
-          >
-            Reset
-          </button>
-          <button
-            type="button"
-            onClick={onSave}
-            className="h-11 flex-1 rounded-xl bg-lime text-ink font-mono text-[11px]"
-          >
-            Save Changes
-          </button>
-        </div>
-      </div>
+      <AnimatePresence>
+      {hasChanges && (
+         <motion.div 
+           initial={{ y: 100 }} 
+           animate={{ y: 0 }} 
+           exit={{ y: 100 }}
+           transition={{ ease: [0.25, 1, 0.5, 1], duration: 0.4 }}
+           className="md:hidden fixed bottom-0 left-0 right-0 z-40 border-t border-bone/[0.08] bg-ink/90 backdrop-blur-xl px-4 py-3"
+         >
+           <div className="max-w-6xl mx-auto flex items-center gap-2">
+             <button
+               type="button"
+               onClick={onReset}
+               className="h-11 px-4 rounded-xl border border-bone/[0.12] text-bone/70 hover:text-bone hover:border-bone/[0.16] transition font-mono text-[11px]"
+             >
+               Reset
+             </button>
+             <button
+               type="button"
+               onClick={onSave}
+               className="h-11 flex-1 rounded-xl bg-lime text-ink font-mono text-[11px] hover:brightness-95 transition"
+             >
+               Save Changes
+             </button>
+           </div>
+         </motion.div>
+      )}
+      </AnimatePresence>
     </div>
   );
 }

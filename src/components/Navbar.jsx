@@ -197,7 +197,7 @@ export default function Navbar() {
             <div className="flex items-center gap-3">
               <motion.button
                 onClick={() => { logout(); navigate('/'); }}
-                className="hidden md:block font-mono text-[11px] text-bone/30 hover:text-rust/80 transition-colors tracking-wide cursor-pointer"
+                className="hidden md:block font-mono text-[11px] bg-rust/10 text-rust border border-rust/20 hover:bg-rust/20 px-3.5 py-1.5 rounded-xl transition-colors tracking-wide cursor-pointer"
                 whileHover={{ y: -1 }}
                 whileTap={{ scale: 0.97 }}
                 transition={{ duration: 0.15 }}
@@ -331,7 +331,7 @@ export default function Navbar() {
               <div className="mt-1 pt-2 border-t border-bone/[0.05]">
                 <motion.button
                   onClick={() => { logout(); navigate('/'); }}
-                  className="w-full text-left px-4 py-2.5 font-mono text-[12px] text-bone/25 hover:text-rust/70 transition-colors cursor-pointer rounded-xl"
+                  className="w-full text-center px-4 py-2.5 font-mono text-[12px] bg-rust/10 text-rust border border-rust/20 hover:bg-rust/20 transition-colors cursor-pointer rounded-xl"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: authLinks.length * 0.05 + 0.05 }}
